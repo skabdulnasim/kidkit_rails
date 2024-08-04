@@ -1,0 +1,8 @@
+:concurrency: 5
+:queues:
+  - default
+  - mailers
+
+# Example Redis URL configuration
+:redis:
+  url: redis://localhost:6379/0
