@@ -1,5 +1,9 @@
 class User < ApplicationRecord
 
+  has_many :videos, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :comments, dependent: :destroy
+
   devise :database_authenticatable, :registerable, :jwt_authenticatable, jwt_revocation_strategy: JwtBlacklist
 
   has_many :videos, dependent: :destroy

@@ -2,7 +2,18 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: 'users/sessions' }
 
   resources :videos, only: [:index, :create, :show]
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resources :videos do
+    member do
+      post :like
+      post :unlike
+      delete :like_nutral
+    end
+    resources :likes, only: [:create, :destroy]
+    resources :comments, only: [:create, :index, :destroy]
+    collection do
+      get :tags, to: 'tags#index'
+    end
+  end
 
   namespace :api do
     namespace :v1 do

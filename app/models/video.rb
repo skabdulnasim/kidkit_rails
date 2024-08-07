@@ -2,6 +2,11 @@ class Video < ApplicationRecord
   belongs_to :user
   has_one_attached :video_file
 
+  has_many :likes, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :video_tags, dependent: :destroy
+  has_many :tags, through: :video_tags
+
   # Ensure that the processed column is available
   validates :processed, inclusion: { in: [true, false] }
   validates :title, presence: true
@@ -13,6 +18,22 @@ class Video < ApplicationRecord
   # Scopes
   scope :processed_videos, -> { where(processed: true) }
   scope :unprocessed_videos, -> { where(processed: false) }
+
+  def likes_count
+    likes.where(:state=>"like").count
+  end
+
+  def unlikes_count
+    likes.where(:state=>"unlike").count
+  end
+
+  def is_liked_by_user?(user)
+    likes.where(:state=>"like").exists?(user: user)
+  end
+
+  def is_unliked_by_user?(user)
+    likes.where(:state=>"unlike").exists?(user: user)
+  end
 
   # Methods
 
